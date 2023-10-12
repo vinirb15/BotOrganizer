@@ -25,6 +25,16 @@
       "@controllers/*": ["./src/presentation/controllers/*"],
       "@services/*": ["./src/applications/services/*"],
       "@modules/*": ["./src/infra/data/modules/*"],
+      "@interfaces/*": ["./src/applications/interfaces/*"],
+      "@middlewares/*": ["./src/applications/middlewares/*"],
+      "@guards/*": ["./src/applications/common/guards/*"],
+      "@decorators/*": ["./src/applications/common/decorators/*"],
+      "@pipes/*": ["./src/applications/common/pipes/*"],
+      "@interceptors/*": ["./src/applications/common/interceptors/*"],
+      "@filters/*": ["./src/applications/common/filters/*"],
+      "@scenes/*": ["./src/applications/scenes/*"],
+      "@wizards/*": ["./src/applications/wizards/*"],
+      "@handlers/*": ["./src/presentation/handlers/*"],
     }
   }
 }
