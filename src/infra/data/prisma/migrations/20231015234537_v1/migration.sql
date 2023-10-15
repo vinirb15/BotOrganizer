@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
-    "number" INTEGER NOT NULL,
+    "id" SERIAL NOT NULL,
+    "phone_number" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "events" (
     "id" SERIAL NOT NULL,
-    "user_id" TEXT NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "addres" TEXT NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
