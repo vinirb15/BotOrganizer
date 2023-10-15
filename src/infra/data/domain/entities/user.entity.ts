@@ -1,16 +1,14 @@
-interface UserInterface {
-  idUser: string;
-}
+export class UserEntity {
+  public id?: number;
+  public phoneNumber: string;
+  public email: string;
+  public firstName: string;
+  public lastName: string;
+  public password?: string;
 
-export class Action {
-  private props: UserInterface;
-  constructor(userInterface: UserInterface) {
-    this.props = userInterface;
-  }
-  public set idUser(idUser: string) {
-    this.props.idUser = idUser;
-  }
-  public get idUser() {
-    return this.props.idUser;
+  constructor(data: UserEntity) {
+    Object.assign(this, {
+      ...data,
+    });
   }
 }
