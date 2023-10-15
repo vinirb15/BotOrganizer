@@ -26,6 +26,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableShutdownHooks();
-  await app.listen(3000);
+  await app.listen(5000);
 }
 bootstrap();
