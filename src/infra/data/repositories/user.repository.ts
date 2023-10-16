@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UserImplements } from './implements/user.implments';
 import { PrismaService } from '@data/prisma/clients/prisma.service';
 import { UserEntity } from '@data/domain/entities/user.entity';
@@ -22,21 +22,30 @@ export class PrismaUserRepository implements UserImplements {
     return this.userMapper.toDomain(user);
   }
 
-  async findByPhoneNumber(phoneNumber: string): Promise<UserEntity> {
-    const user = await this.prisma.users.findFirst({
+  async createUser(data: UserEntity): Promise<UserEntity> {
+    const existingUser = await await this.prisma.users.findFirst({
       where: {
-        phoneNumber,
+        phoneNumber: data.phoneNumber,
       },
     });
 
-    return this.userMapper.toDomain(user);
-  }
+    if (existingUser) throw new BadRequestException('Usuário já cadastrado.');
 
-  async createUser(data: UserEntity): Promise<UserEntity> {
     const user = await this.prisma.users.create({
       data: this.userMapper.toPrisma(data),
     });
 
     return this.userMapper.toDomain(user);
+  }
+
+  async deleteUser(userId: number): Promise<void> {
+    await this.prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        inactive: true,
+      },
+    });
   }
 }

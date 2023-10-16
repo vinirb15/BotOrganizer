@@ -1,6 +1,6 @@
 import { UserImplements } from '@data/repositories/implements/user.implments';
 import { UserInterface } from '@interfaces/user.interface';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -11,10 +11,14 @@ export class UserService {
   }
 
   async createUser(data: UserInterface) {
-    const user = await this.userRepository.findByPhoneNumber(data.phoneNumber);
-
-    if (user) throw new BadRequestException('Já existe usuário com este número de telefone.');
-
     return await this.userRepository.createUser(data);
+  }
+
+  async deleteUser(userId: number) {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+
+    return await this.userRepository.deleteUser(userId);
   }
 }

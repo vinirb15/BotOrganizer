@@ -16,10 +16,10 @@ export class PrismaUserMapper {
 
   toDomain(data: Users) {
     return new UserEntity({
-      phoneNumber: data.phoneNumber,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
+      phoneNumber: data.phoneNumber,
     });
   }
 }
