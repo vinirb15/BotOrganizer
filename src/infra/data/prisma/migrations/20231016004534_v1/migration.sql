@@ -6,6 +6,7 @@ CREATE TABLE "users" (
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "inactive" BOOLEAN NOT NULL DEFAULT false,
     "updated_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -23,6 +24,7 @@ CREATE TABLE "events" (
     "repeat" TEXT NOT NULL,
     "guests" INTEGER NOT NULL,
     "notes" TEXT NOT NULL,
+    "inactive" BOOLEAN NOT NULL DEFAULT false,
     "updated_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
