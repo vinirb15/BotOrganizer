@@ -1,7 +1,11 @@
 import { Command, Ctx, Hears, Start, Update, Sender } from 'nestjs-telegraf';
 import { UpdateType as TelegrafUpdateType } from 'telegraf/typings/telegram-types';
 import { Context } from '@interfaces/context.interface';
-import { HELLO_SCENE_ID, WIZARD_SCENE_ID } from '../../applications/app.constants';
+import {
+  HELLO_SCENE_ID,
+  WIZARD_SCENE_ID,
+  CREATE_USER_SCENE_ID,
+} from '../../applications/app.constants';
 import { UpdateType } from '@decorators/update-type.decorator';
 import { AdminGuard } from '@guards/admin.guard';
 import { UseGuards } from '@nestjs/common';
@@ -29,6 +33,11 @@ export class GreeterUpdate {
   @Command('wizard')
   async onWizardCommand(@Ctx() ctx: Context): Promise<void> {
     await ctx.scene.enter(WIZARD_SCENE_ID);
+  }
+
+  @Command('login')
+  async onLoginCreate(@Ctx() ctx: Context): Promise<void> {
+    await ctx.scene.enter(CREATE_USER_SCENE_ID);
   }
 
   @Command('admin')

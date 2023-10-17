@@ -10,6 +10,10 @@ export class UserService {
     return await this.userRepository.findById(userId);
   }
 
+  async findByEmail(userEmail: string) {
+    return await this.userRepository.findByEmail(userEmail);
+  }
+
   async createUser(data: UserInterface) {
     return await this.userRepository.createUser(data);
   }

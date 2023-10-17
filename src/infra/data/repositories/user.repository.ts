@@ -22,6 +22,18 @@ export class PrismaUserRepository implements UserImplements {
     return this.userMapper.toDomain(user);
   }
 
+  async findByEmail(userEmail: string): Promise<UserEntity> {
+    const user = await this.prisma.users.findFirst({
+      where: {
+        email: userEmail,
+      },
+    });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+
+    return this.userMapper.toDomain(user);
+  }
+
   async createUser(data: UserEntity): Promise<UserEntity> {
     const existingUser = await await this.prisma.users.findFirst({
       where: {

@@ -7,8 +7,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/:userId')
-  async findNextEvents(@Param('userId', ParseIntPipe) userId: number) {
+  async findById(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.findById(userId);
+  }
+
+  @Get('/findByEmail')
+  async findByEmail(@Param('userEmail') userEmail: string) {
+    return this.userService.findByEmail(userEmail);
   }
 
   @Post()
