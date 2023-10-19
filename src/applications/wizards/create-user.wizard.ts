@@ -46,11 +46,11 @@ export class CreateUserWizard {
     @Message() msg: { text: string }
   ): Promise<string> {
     try {
+      const { first_name: firstName, last_name: lastName, id: idBot } = ctx.message.from;
       const { email } = ctx.wizard.state;
       const password = msg.text;
-      const existingUser = await this.userService.login({ email, password });
+      const existingUser = await this.userService.login({ email, password, idBot: String(idBot) });
       if (existingUser) {
-        const { first_name: firstName, last_name: lastName } = ctx.message.from;
         await ctx.scene.leave();
         return `Bem vindo ${firstName} ${lastName}`;
       }
@@ -120,7 +120,7 @@ export class CreateUserWizard {
       return `As senhas são diferentes, digite novamente...`;
     }
 
-    const { first_name: firstName, last_name: lastName } = ctx.message.from;
+    const { first_name: firstName, last_name: lastName, id: idBot } = ctx.message.from;
     const { email, password, phoneNumber } = ctx.wizard.state;
 
     const createUserObject = {
@@ -129,6 +129,7 @@ export class CreateUserWizard {
       email,
       password,
       phoneNumber,
+      idBot: String(idBot),
     };
 
     await this.userService.createUser(createUserObject);
