@@ -12,7 +12,7 @@ datasource db {
 
 model Users {
   id          Int       @id @default(autoincrement())
-  idBot       Int?      @map("id_bot")
+  idBot       String?   @map("id_bot")
   phoneNumber String    @unique @map("phone_number")
   email       String
   firstName   String    @map("first_name")
