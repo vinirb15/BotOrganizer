@@ -1,6 +1,7 @@
 import { UserImplements } from '@data/repositories/implements/user.implments';
 import { UserInterface } from '@interfaces/user.interface';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -14,8 +15,16 @@ export class UserService {
     return await this.userRepository.findByEmail(userEmail);
   }
 
+  async login(data: Partial<UserInterface>) {
+    const { email, password } = data;
+    const hash = await bcrypt.hash(password, process.env.ENCRYPT_SALT);
+    return await this.userRepository.login(email, hash);
+  }
+
   async createUser(data: UserInterface) {
-    return await this.userRepository.createUser(data);
+    const { password } = data;
+    const hash = await bcrypt.hash(password, process.env.ENCRYPT_SALT);
+    return await this.userRepository.createUser({ ...data, password: hash });
   }
 
   async deleteUser(userId: number) {

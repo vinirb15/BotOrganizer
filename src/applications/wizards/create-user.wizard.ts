@@ -24,9 +24,13 @@ export class CreateUserWizard {
 
       ctx.wizard.state['email'] = msg.text;
       const existingUser = await this.userService.findByEmail(msg.text);
-      await ctx.scene.leave();
-      return `Bem vindo ${existingUser.firstName}`;
+
+      if (existingUser) {
+        await ctx.wizard.next();
+        return `Olá ${existingUser.firstName}, digite sua senha de acesso...`;
+      }
     } catch (error) {
+      await ctx.wizard.next();
       await ctx.wizard.next();
       return 'Não foi encontrado um usuário com esse email, deseja criar uma nova conta?';
     }
@@ -34,6 +38,30 @@ export class CreateUserWizard {
 
   @On('text')
   @WizardStep(3)
+  async onValidatePasss(
+    @Ctx()
+    ctx: WizardContext & {
+      wizard: { state: { email: string } };
+    },
+    @Message() msg: { text: string }
+  ): Promise<string> {
+    try {
+      const { email } = ctx.wizard.state;
+      const password = msg.text;
+      const existingUser = await this.userService.login({ email, password });
+      if (existingUser) {
+        const { first_name: firstName, last_name: lastName } = ctx.message.from;
+        await ctx.scene.leave();
+        return `Bem vindo ${firstName} ${lastName}`;
+      }
+    } catch (error) {
+      await ctx.wizard.selectStep(2);
+      return 'Usuário ou senha incorretos, digite novamente...';
+    }
+  }
+
+  @On('text')
+  @WizardStep(4)
   async onValidateEmail(
     @Ctx() ctx: WizardContext,
     @Message() msg: { text: string }
@@ -42,15 +70,15 @@ export class CreateUserWizard {
 
     if (afirmativeResponse.includes(msg.text)) {
       await ctx.wizard.next();
-      return `Digite seu número de telefone neste formato: +55(12)999999999`;
+      return `Digite seu número de telefone neste formato: +55(12)999999999.`;
     }
 
     await ctx.scene.leave();
-    return `Volte sempre ${ctx.message.from.first_name} 👋`;
+    return `Volte sempre ${ctx.message.from.first_name} 👋.`;
   }
 
   @On('text')
-  @WizardStep(4)
+  @WizardStep(5)
   async onReceiveData(
     @Ctx() ctx: WizardContext,
     @Message() msg: { text: string }
@@ -58,7 +86,7 @@ export class CreateUserWizard {
     const regex = /^\+\d{2}\(\d{2}\)\d{9}$/;
 
     if (!regex.test(msg.text)) {
-      await ctx.wizard.selectStep(3);
+      await ctx.wizard.selectStep(4);
       return `Formato de telefone inválido, digite novamente...`;
     }
 
@@ -68,7 +96,7 @@ export class CreateUserWizard {
   }
 
   @On('text')
-  @WizardStep(5)
+  @WizardStep(6)
   async onRecievePass(
     @Ctx() ctx: WizardContext,
     @Message() msg: { text: string }
@@ -79,7 +107,7 @@ export class CreateUserWizard {
   }
 
   @On('text')
-  @WizardStep(6)
+  @WizardStep(7)
   async onValidatePass(
     @Ctx()
     ctx: WizardContext & {
@@ -106,6 +134,6 @@ export class CreateUserWizard {
     await this.userService.createUser(createUserObject);
 
     await ctx.scene.leave();
-    return `Conta criada, bem vindo ${firstName} ${lastName}`;
+    return `Conta criada, bem vindo ${firstName} ${lastName}.`;
   }
 }

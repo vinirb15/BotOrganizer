@@ -1,14 +1,21 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserImplements } from './implements/user.implments';
 import { PrismaService } from '@data/prisma/clients/prisma.service';
 import { UserEntity } from '@data/domain/entities/user.entity';
 import { PrismaUserMapper } from '@data/prisma/mappers/user.mapper';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PrismaUserRepository implements UserImplements {
   constructor(
     private prisma: PrismaService,
-    private userMapper: PrismaUserMapper
+    private userMapper: PrismaUserMapper,
+    private jwtService: JwtService
   ) {}
   async findById(userId: number): Promise<UserEntity> {
     const user = await this.prisma.users.findUnique({
@@ -34,6 +41,28 @@ export class PrismaUserRepository implements UserImplements {
     return this.userMapper.toDomain(user);
   }
 
+  async login(email: string, password: string): Promise<UserEntity> {
+    const user = await this.prisma.users.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (user) {
+      if (password === user.password) {
+        const accessToken = await this.jwtService.signAsync({ ...user, password: null });
+
+        return this.userMapper.toDomain({
+          ...user,
+          accessToken,
+          password: undefined,
+        });
+      }
+    }
+
+    throw new UnauthorizedException('Usuário ou senha inválido.');
+  }
+
   async createUser(data: UserEntity): Promise<UserEntity> {
     const existingUser = await await this.prisma.users.findFirst({
       where: {
@@ -42,9 +71,10 @@ export class PrismaUserRepository implements UserImplements {
     });
 
     if (existingUser) throw new BadRequestException('Usuário já cadastrado.');
+    const accessToken = await this.jwtService.signAsync({ ...data, password: null });
 
     const user = await this.prisma.users.create({
-      data: this.userMapper.toPrisma(data),
+      data: this.userMapper.toPrisma({ ...data, accessToken }),
     });
 
     return this.userMapper.toDomain(user);
