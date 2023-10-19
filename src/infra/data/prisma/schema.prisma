@@ -12,6 +12,7 @@ datasource db {
 
 model Users {
   id          Int       @id @default(autoincrement())
+  idBot       Int?      @map("id_bot")
   phoneNumber String    @unique @map("phone_number")
   email       String
   firstName   String    @map("first_name")
@@ -20,6 +21,7 @@ model Users {
   inactive    Boolean   @default(false)
   updatedAt   DateTime? @map("updated_at")
   createdAt   DateTime  @default(now()) @map("created_at")
+  accessToken String?   @map("access_token")
   Events      Events[]
 
   @@map("users")
