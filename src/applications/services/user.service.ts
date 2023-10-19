@@ -27,6 +27,10 @@ export class UserService {
     return await this.userRepository.createUser({ ...data, password: hash });
   }
 
+  async isValidIdBot(idBot: string) {
+    return await this.userRepository.isValidIdBot(idBot);
+  }
+
   async deleteUser(userId: number) {
     const user = await this.userRepository.findById(userId);
 

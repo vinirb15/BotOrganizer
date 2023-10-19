@@ -5,5 +5,6 @@ export abstract class UserImplements {
   abstract findByEmail(userEmail: string): Promise<UserEntity>;
   abstract login(email: string, password: string): Promise<UserEntity>;
   abstract createUser(body: UserEntity): Promise<UserEntity>;
+  abstract isValidIdBot(idBot: string): Promise<boolean>;
   abstract deleteUser(userId: number): Promise<void>;
 }

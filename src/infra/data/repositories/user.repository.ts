@@ -51,7 +51,14 @@ export class PrismaUserRepository implements UserImplements {
     if (user) {
       if (password === user.password) {
         const accessToken = await this.jwtService.signAsync({ ...user, password: null });
-
+        await this.prisma.users.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            accessToken,
+          },
+        });
         return this.userMapper.toDomain({
           ...user,
           accessToken,
@@ -78,6 +85,26 @@ export class PrismaUserRepository implements UserImplements {
     });
 
     return this.userMapper.toDomain(user);
+  }
+
+  async isValidIdBot(idBot: string): Promise<boolean> {
+    try {
+      const user = await this.prisma.users.findFirst({
+        where: {
+          idBot,
+        },
+      });
+
+      if (user) {
+        await this.jwtService.verifyAsync(user.accessToken, {
+          secret: process.env.JWT_SECRET,
+        });
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
   }
 
   async deleteUser(userId: number): Promise<void> {

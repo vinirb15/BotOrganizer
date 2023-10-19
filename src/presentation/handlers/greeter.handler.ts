@@ -8,6 +8,7 @@ import {
 } from '../../applications/app.constants';
 import { UpdateType } from '@decorators/update-type.decorator';
 import { AdminGuard } from '@guards/admin.guard';
+import { EventGuard } from '@guards/event.guard';
 import { UseGuards } from '@nestjs/common';
 
 @Update()
@@ -18,6 +19,7 @@ export class GreeterUpdate {
   }
 
   @Hears(['hi', 'hello', 'hey', 'qq'])
+  @UseGuards(EventGuard)
   onGreetings(
     @UpdateType() updateType: TelegrafUpdateType,
     @Sender('first_name') firstName: string

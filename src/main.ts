@@ -2,6 +2,7 @@ import { AppModule } from './infra/data/modules/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { TelegrafExceptionFilter } from '@filters/telegraf-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableShutdownHooks();
+  app.useGlobalFilters(new TelegrafExceptionFilter()); // Registre o filtro como middleware global
   await app.listen(5000);
 }
 bootstrap();
