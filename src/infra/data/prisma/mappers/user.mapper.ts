@@ -6,11 +6,13 @@ import { Prisma, Users } from '@prisma/client';
 export class PrismaUserMapper {
   toPrisma(data: UserEntity): Prisma.UsersCreateInput {
     return {
+      idBot: data.idBot,
       phoneNumber: data.phoneNumber,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
+      accessToken: data.accessToken,
     };
   }
 
@@ -20,6 +22,7 @@ export class PrismaUserMapper {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
+      accessToken: data.accessToken,
     });
   }
 }
