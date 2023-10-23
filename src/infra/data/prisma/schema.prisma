@@ -11,36 +11,54 @@ datasource db {
 }
 
 model Users {
-  id          Int       @id @default(autoincrement())
-  idBot       String?   @map("id_bot")
-  phoneNumber String    @unique @map("phone_number")
-  email       String
-  firstName   String    @map("first_name")
-  lastName    String    @map("last_name")
-  password    String
-  inactive    Boolean   @default(false)
-  updatedAt   DateTime? @map("updated_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  accessToken String?   @map("access_token")
-  Events      Events[]
+  id            Int             @id @default(autoincrement())
+  idBot         String?         @map("id_bot")
+  phoneNumber   String          @unique @map("phone_number") @db.VarChar(20)
+  email         String          @db.VarChar(255)
+  firstName     String          @map("first_name") @db.VarChar(50)
+  lastName      String          @map("last_name") @db.VarChar(50)
+  password      String          @db.VarChar(50)
+  inactive      Boolean         @default(false)
+  updatedAt     DateTime?       @map("updated_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  accessToken   String?         @map("access_token")
+  Events        Events[]
+  Notifications Notifications[]
 
   @@map("users")
 }
 
 model Events {
+  id            Int             @id @default(autoincrement())
+  userId        Int             @map("user_id")
+  title         String          @db.VarChar(255)
+  address       String          @db.VarChar(255)
+  startDate     DateTime        @map("start_date")
+  endDate       DateTime        @map("end_date")
+  repeat        String          @db.VarChar(20)
+  guests        String          @db.VarChar(255)
+  notes         String
+  inactive      Boolean         @default(false)
+  updatedAt     DateTime?       @map("updated_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  Users         Users           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Notifications Notifications[]
+
+  @@map("events")
+}
+
+model Notifications {
   id        Int       @id @default(autoincrement())
   userId    Int       @map("user_id")
-  title     String
-  addres    String
-  startDate DateTime  @map("start_date")
-  endDate   DateTime  @map("end_date")
-  repeat    String
-  guests    Int
+  eventId   Int       @map("event_id")
+  title     String    @db.VarChar(255)
   notes     String
+  read      Boolean   @default(false)
   inactive  Boolean   @default(false)
   updatedAt DateTime? @map("updated_at")
   createdAt DateTime  @default(now()) @map("created_at")
   Users     Users     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Events    Events    @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@map("events")
+  @@map("notifications")
 }
