@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DataModule } from './data.module';
 import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { EventModule } from './event.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { JwtModule } from '@nestjs/jwt';
     GreeterModule,
     DataModule,
     UserModule,
+    EventModule,
   ],
 })
 export class AppModule {}

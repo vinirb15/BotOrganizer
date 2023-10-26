@@ -36,7 +36,9 @@
       "@filters/*": ["./src/applications/common/filters/*"],
       "@scenes/*": ["./src/applications/scenes/*"],
       "@wizards/*": ["./src/applications/wizards/*"],
-      "@handlers/*": ["./src/presentation/handlers/*"]
+      "@handlers/*": ["./src/presentation/handlers/*"],
+      "@dtos/*": ["./src/applications/DTOs/*"],
+      "@entities/*": ["./src/infra/data/domain/entities/*"]
     }
   }
 }
