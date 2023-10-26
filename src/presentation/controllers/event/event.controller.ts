@@ -6,12 +6,12 @@ import { EventDTO } from 'src/applications/DTOs/event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  @Get('/findById')
+  @Get('/findById/:eventId')
   async findById(@Param('eventId', ParseIntPipe) eventId: number) {
     return this.eventService.findById(eventId);
   }
 
-  @Get('/findByUser')
+  @Get('/findByUser/:userId')
   async findByUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.eventService.findByUser(userId);
   }
@@ -21,9 +21,9 @@ export class EventController {
     return this.eventService.createEvent(body);
   }
 
-  @Put()
-  async updateEvent(@Body() body: EventDTO) {
-    return this.eventService.updateEvent(body);
+  @Put('/:eventId')
+  async updateEvent(@Param('eventId', ParseIntPipe) eventId: number, @Body() body: EventDTO) {
+    return this.eventService.updateEvent(eventId, body);
   }
 
   @Delete('/:eventId')

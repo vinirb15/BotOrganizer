@@ -1,8 +1,9 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
-import { CreateUserDTO } from 'src/applications/DTOs/create-user.dto';
-import { AppModule } from '../../../infra/data/modules/app.module';
+import { CreateUserDTO } from '@dtos/create-user.dto';
+import { AppModule } from '@modules/app.module';
+import { randomUUID, randomInt } from 'node:crypto';
 import request from 'supertest';
 
 describe('EventController', () => {
@@ -46,9 +47,11 @@ describe('EventController', () => {
   });
 
   it('should return a 201 Created if payload is valid', async () => {
+    const testEmail = randomUUID().split('-')[0];
+    const testMumber = randomInt(100000000, 999999999);
     const validPayload: CreateUserDTO = {
-      phoneNumber: '+55(12)988888888',
-      email: 'test@example.com',
+      phoneNumber: `+55(12)${testMumber}`,
+      email: `${testEmail}@example.com`,
       firstName: 'Test',
       lastName: 'User',
       password: '1234',

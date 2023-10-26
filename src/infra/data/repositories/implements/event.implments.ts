@@ -4,6 +4,6 @@ export abstract class EventImplements {
   abstract findById(eventId: number): Promise<EventEntity>;
   abstract findByUser(userId: number): Promise<EventEntity[]>;
   abstract createEvent(body: EventEntity): Promise<EventEntity>;
-  abstract updateEvent(body: EventEntity): Promise<EventEntity>;
+  abstract updateEvent(eventId: number, body: EventEntity): Promise<EventEntity>;
   abstract deleteEvent(userId: number): Promise<void>;
 }

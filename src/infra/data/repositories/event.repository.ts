@@ -43,11 +43,11 @@ export class PrismaEventRepository implements EventImplements {
 
     return this.eventMapper.toDomain(event);
   }
-  async updateEvent(body: EventEntity): Promise<EventEntity> {
+  async updateEvent(eventId: number, body: EventEntity): Promise<EventEntity> {
     const event = await this.prisma.events.update({
       data: this.eventMapper.toPrisma(body),
       where: {
-        id: body.eventId,
+        id: eventId,
       },
     });
 

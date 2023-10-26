@@ -18,8 +18,8 @@ export class EventService {
     return await this.eventRepository.createEvent(data);
   }
 
-  async updateEvent(data: EventInterface) {
-    return await this.eventRepository.updateEvent(data);
+  async updateEvent(eventId: number, data: EventInterface) {
+    return await this.eventRepository.updateEvent(eventId, data);
   }
 
   async deleteEvent(userId: number) {
