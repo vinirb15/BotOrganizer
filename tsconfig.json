@@ -38,7 +38,8 @@
       "@wizards/*": ["./src/applications/wizards/*"],
       "@handlers/*": ["./src/presentation/handlers/*"],
       "@dtos/*": ["./src/applications/DTOs/*"],
-      "@entities/*": ["./src/infra/data/domain/entities/*"]
+      "@entities/*": ["./src/infra/data/domain/entities/*"],
+      "@applications/*": ["./src/applications/*"]
     }
   }
 }
