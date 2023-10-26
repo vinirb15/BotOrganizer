@@ -17,7 +17,7 @@ export class UserController {
     return this.userService.findByEmail(userEmail);
   }
 
-  @Post('login')
+  @Post('/login')
   async login(@Body() body: LoginDTO) {
     return this.userService.login(body);
   }
