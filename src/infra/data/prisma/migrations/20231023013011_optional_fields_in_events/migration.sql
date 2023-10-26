@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "events" ALTER COLUMN "address" DROP NOT NULL,
+ALTER COLUMN "guests" DROP NOT NULL,
+ALTER COLUMN "notes" DROP NOT NULL;
