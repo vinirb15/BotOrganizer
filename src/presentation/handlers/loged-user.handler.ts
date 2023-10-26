@@ -1,11 +1,14 @@
-import { Command, Hears, Update, Sender, Ctx } from 'nestjs-telegraf';
-import { UpdateType as TelegrafUpdateType } from 'telegraf/typings/telegram-types';
-import { UpdateType } from '@decorators/update-type.decorator';
+import { Command, Hears, Update, Ctx } from 'nestjs-telegraf';
 import { AdminGuard } from '@guards/admin.guard';
-import { UseGuards } from '@nestjs/common';
-import { WizardContext } from 'telegraf/typings/scenes';
+import { UseFilters, UseGuards } from '@nestjs/common';
+import { TelegrafExceptionFilter } from '@filters/telegraf-exception.filter';
+import { Context } from '@interfaces/context.interface';
+import { EVENT_SCENE_ID } from '@applications/app.constants';
+import { EventGuard } from '@guards/event.guard';
 
 @Update()
+@UseGuards(EventGuard)
+@UseFilters(new TelegrafExceptionFilter())
 export class LogedUserHandler {
   @Hears(/^(?=.*\bcriar\b)(?=.*\bevento\b).*\?$/i)
   helpToCreate(): string {
@@ -13,12 +16,8 @@ export class LogedUserHandler {
   }
 
   @Hears(/criar.*evento|evento.*criar/)
-  onGreetings(
-    @Ctx() ctx: WizardContext,
-    @UpdateType() updateType: TelegrafUpdateType,
-    @Sender('first_name') firstName: string
-  ): string {
-    return `Hey ${firstName}`;
+  async onCreateEvent(@Ctx() ctx: Context): Promise<void> {
+    await ctx.scene.enter(EVENT_SCENE_ID);
   }
 
   @Command('admin')
