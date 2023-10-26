@@ -15,6 +15,10 @@ export class UserService {
     return await this.userRepository.findByEmail(userEmail);
   }
 
+  async findByBotId(botId: string) {
+    return await this.userRepository.findByBotId(botId);
+  }
+
   async login(data: Partial<UserInterface>) {
     const { email, password } = data;
     const hash = await bcrypt.hash(password, process.env.ENCRYPT_SALT);

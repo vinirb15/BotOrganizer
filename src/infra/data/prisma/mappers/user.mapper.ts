@@ -18,6 +18,7 @@ export class PrismaUserMapper {
 
   toDomain(data: Users) {
     return new UserEntity({
+      id: data.id,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,

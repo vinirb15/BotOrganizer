@@ -17,6 +17,18 @@ export class PrismaUserRepository implements UserImplements {
     private userMapper: PrismaUserMapper,
     private jwtService: JwtService
   ) {}
+  async findByBotId(userId: string): Promise<UserEntity> {
+    const user = await this.prisma.users.findFirst({
+      where: {
+        idBot: userId,
+      },
+    });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+
+    return this.userMapper.toDomain(user);
+  }
+
   async findById(userId: number): Promise<UserEntity> {
     const user = await this.prisma.users.findUnique({
       where: {
