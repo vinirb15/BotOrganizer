@@ -1,8 +1,11 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { WIZARD_SCENE_ID } from '../app.constants';
 import { WizardContext } from 'telegraf/typings/scenes';
+import { TelegrafExceptionFilter } from '../common/filters/telegraf-exception.filter';
+import { UseFilters } from '@nestjs/common';
 
 @Wizard(WIZARD_SCENE_ID)
+@UseFilters(new TelegrafExceptionFilter())
 export class GreeterWizard {
   @WizardStep(1)
   async onSceneEnter(@Ctx() ctx: WizardContext): Promise<string> {

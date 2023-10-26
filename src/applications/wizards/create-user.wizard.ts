@@ -2,8 +2,11 @@ import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { CREATE_USER_SCENE_ID } from '../app.constants';
 import { WizardContext } from 'telegraf/typings/scenes';
 import { UserService } from '../services/user.service';
+import { UseFilters } from '@nestjs/common';
+import { TelegrafExceptionFilter } from '../common/filters/telegraf-exception.filter';
 
 @Wizard(CREATE_USER_SCENE_ID)
+@UseFilters(new TelegrafExceptionFilter())
 export class CreateUserWizard {
   constructor(private readonly userService: UserService) {}
   @WizardStep(1)

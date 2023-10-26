@@ -9,9 +9,11 @@ import {
 import { UpdateType } from '@decorators/update-type.decorator';
 import { AdminGuard } from '@guards/admin.guard';
 import { EventGuard } from '@guards/event.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
+import { TelegrafExceptionFilter } from 'src/applications/common/filters/telegraf-exception.filter';
 
 @Update()
+@UseFilters(new TelegrafExceptionFilter())
 export class GreeterUpdate {
   @Start()
   onStart(): string {
