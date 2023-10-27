@@ -8,6 +8,7 @@ import { DataModule } from './data.module';
 import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventModule } from './event.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EventModule } from './event.module';
         include: [GreeterModule],
       }),
     }),
+    ScheduleModule.forRoot(),
     GreeterModule,
     DataModule,
     UserModule,

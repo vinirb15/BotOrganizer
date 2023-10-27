@@ -3,9 +3,10 @@ import { GreeterUpdate } from '@handlers/greeter.handler';
 import { RandomNumberScene } from '@scenes/random-number.scene';
 import { GreeterWizard } from '@wizards/greeter.wizard';
 import { CreateUserWizard } from '@wizards/create-user.wizard';
-import { UserService } from 'src/applications/services/user.service';
-import { CreateEventWizard } from 'src/applications/wizards/create-event.wizard';
-import { EventService } from 'src/applications/services/event.service';
+import { UserService } from '@services/user.service';
+import { CreateEventWizard } from '@wizards/create-event.wizard';
+import { EventService } from '@services/event.service';
+import { TelegramService } from '@services/telegram.service';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { EventService } from 'src/applications/services/event.service';
     UserService,
     CreateEventWizard,
     EventService,
+    TelegramService,
   ],
 })
 export class GreeterModule {}

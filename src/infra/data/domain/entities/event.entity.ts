@@ -1,3 +1,5 @@
+import { UserEntity } from './user.entity';
+
 export class EventEntity {
   public eventId?: number;
   public userId: number;
@@ -8,6 +10,7 @@ export class EventEntity {
   public repeat: string;
   public guests?: string;
   public notes?: string;
+  public user?: Partial<UserEntity>;
 
   constructor(data: EventEntity) {
     Object.assign(this, {

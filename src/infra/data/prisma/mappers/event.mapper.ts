@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Events, Prisma } from '@prisma/client';
 import { EventEntity } from '../../domain/entities/event.entity';
+import { UserEntity } from '../../domain/entities/user.entity';
 
 @Injectable()
 export class PrismaEventMapper {
@@ -31,6 +32,29 @@ export class PrismaEventMapper {
       repeat: data.repeat,
       guests: data.guests,
       notes: data.notes,
+    });
+  }
+
+  todayEvents(
+    data: Events & {
+      Users: UserEntity;
+    }
+  ) {
+    return new EventEntity({
+      userId: data.userId,
+      title: data.title,
+      address: data.address,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      repeat: data.repeat,
+      guests: data.guests,
+      notes: data.notes,
+      user: data.Users
+        ? {
+            id: data.Users.id,
+            idBot: data.Users.idBot,
+          }
+        : null,
     });
   }
 }

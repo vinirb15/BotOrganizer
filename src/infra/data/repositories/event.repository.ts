@@ -3,6 +3,7 @@ import { PrismaService } from '@data/prisma/clients/prisma.service';
 import { EventImplements } from './implements/event.implments';
 import { EventEntity } from '../domain/entities/event.entity';
 import { PrismaEventMapper } from '../prisma/mappers/event.mapper';
+import { dateWithoutTz, endOfDay, startOfDay } from 'src/applications/utils/date.util';
 
 @Injectable()
 export class PrismaEventRepository implements EventImplements {
@@ -36,6 +37,28 @@ export class PrismaEventRepository implements EventImplements {
     });
   }
 
+  async findTodayEvents(): Promise<EventEntity[]> {
+    const date = dateWithoutTz(new Date()).toISOString().split('T')[0];
+    const startTime = startOfDay(date);
+    const endTime = endOfDay(date);
+
+    const events = await this.prisma.events.findMany({
+      include: {
+        Users: true,
+      },
+      where: {
+        startDate: { gte: startTime },
+        endDate: { lte: endTime },
+      },
+    });
+
+    if (!events) return [];
+
+    return events.map((event) => {
+      return this.eventMapper.todayEvents(event);
+    });
+  }
+
   async createEvent(body: EventEntity): Promise<EventEntity> {
     const event = await this.prisma.events.create({
       data: this.eventMapper.toPrisma(body),
@@ -43,6 +66,7 @@ export class PrismaEventRepository implements EventImplements {
 
     return this.eventMapper.toDomain(event);
   }
+
   async updateEvent(eventId: number, body: EventEntity): Promise<EventEntity> {
     const event = await this.prisma.events.update({
       data: this.eventMapper.toPrisma(body),
@@ -53,6 +77,7 @@ export class PrismaEventRepository implements EventImplements {
 
     return this.eventMapper.toDomain(event);
   }
+
   async deleteEvent(eventId: number): Promise<void> {
     await this.prisma.events.update({
       data: {

@@ -1,12 +1,13 @@
 import { Global, Module } from '@nestjs/common';
 import { EventController } from 'src/presentation/controllers/event/event.controller';
-import { EventService } from 'src/applications/services/event.service';
+import { EventService } from '@services/event.service';
 import { LogedUserHandler } from 'src/presentation/handlers/loged-user.handler';
-import { UserService } from 'src/applications/services/user.service';
+import { UserService } from '@services/user.service';
+import { TelegramService } from '@services/telegram.service';
 
 @Global()
 @Module({
   controllers: [EventController],
-  providers: [EventService, UserService, LogedUserHandler],
+  providers: [EventService, UserService, LogedUserHandler, TelegramService],
 })
 export class EventModule {}
