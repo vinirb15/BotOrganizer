@@ -57,4 +57,19 @@ export class PrismaEventMapper {
         : null,
     });
   }
+
+  nextEvents(data: Events, orderId: number) {
+    return new EventEntity({
+      eventId: data.id,
+      userId: data.userId,
+      title: data.title,
+      address: data.address,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      repeat: data.repeat,
+      guests: data.guests,
+      notes: data.notes,
+      orderId,
+    });
+  }
 }

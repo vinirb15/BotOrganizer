@@ -16,6 +16,11 @@ export class EventController {
     return this.eventService.findByUser(userId);
   }
 
+  @Get('/findNextEvents/:userId')
+  async findNextEvents(@Param('userId', ParseIntPipe) userId: number) {
+    return this.eventService.findNextEvents(userId);
+  }
+
   @Post()
   async createEvent(@Body() body: EventDTO) {
     return this.eventService.createEvent(body);

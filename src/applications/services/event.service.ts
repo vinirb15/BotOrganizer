@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { EventInterface } from '@interfaces/event.interface';
 import { EventImplements } from '@data/repositories/implements/event.implments';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -8,8 +8,11 @@ import { TelegramService } from './telegram.service';
 export class EventService {
   constructor(
     private readonly eventRepository: EventImplements,
-    private readonly telegramService: TelegramService
-  ) {}
+    private readonly telegramService: TelegramService,
+    private logger: Logger
+  ) {
+    this.logger = new Logger(EventService.name);
+  }
 
   async findById(eventId: number) {
     return await this.eventRepository.findById(eventId);
@@ -17,6 +20,10 @@ export class EventService {
 
   async findByUser(userId: number) {
     return await this.eventRepository.findByUser(userId);
+  }
+
+  async findNextEvents(userId: number) {
+    return await this.eventRepository.findNextEvents(userId);
   }
 
   async createEvent(data: EventInterface) {
@@ -35,21 +42,43 @@ export class EventService {
     return await this.eventRepository.deleteEvent(userId);
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS, {
-    name: 'sendNotification',
+  @Cron(CronExpression.EVERY_DAY_AT_1AM, {
+    name: 'todayNotification',
     timeZone: 'America/Sao_Paulo',
   })
-  async handleCron() {
-    console.log('Running notifications...');
+  async todayNotificationsCron() {
+    this.logger.log('Running today notifications...');
     const start = Date.now();
     const events = await this.eventRepository.findTodayEvents();
     for (const event of events) {
-      const { user, title } = event;
-      console.log(title, user);
-      // await this.telegramService.sendMessage(Number(user.idBot), title);
+      const { user, title, startDate, endDate } = event;
+      await this.telegramService.sendMessage(
+        Number(user.idBot),
+        `Você tem um evento programado para hoje:\n${title}\nInício: ${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}\nFim: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`
+      );
     }
     const timeTaken = Date.now() - start;
-    console.log('Finished!');
-    console.log('Execution time: ' + timeTaken + ' milliseconds');
+    this.logger.log('Finished!');
+    this.logger.log('Today Notification Execution time: ' + timeTaken + ' milliseconds');
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM, {
+    name: 'sendTomorrowNotification',
+    timeZone: 'America/Sao_Paulo',
+  })
+  async tomorrowNotificationsCron() {
+    this.logger.log('Running tomorrow notifications...');
+    const start = Date.now();
+    const events = await this.eventRepository.findTomorrowEvents();
+    for (const event of events) {
+      const { user, title, startDate, endDate } = event;
+      await this.telegramService.sendMessage(
+        Number(user.idBot),
+        `Você tem um evento programado para amanhã:\n${title}\nInício: ${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}\nFim: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`
+      );
+    }
+    const timeTaken = Date.now() - start;
+    this.logger.log('Finished!');
+    this.logger.log('Tomorrow Notification Execution time: ' + timeTaken + ' milliseconds');
   }
 }

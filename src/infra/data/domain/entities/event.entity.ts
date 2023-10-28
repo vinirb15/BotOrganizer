@@ -10,6 +10,7 @@ export class EventEntity {
   public repeat: string;
   public guests?: string;
   public notes?: string;
+  public orderId?: number;
   public user?: Partial<UserEntity>;
 
   constructor(data: EventEntity) {

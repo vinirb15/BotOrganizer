@@ -3,7 +3,12 @@ import { PrismaService } from '@data/prisma/clients/prisma.service';
 import { EventImplements } from './implements/event.implments';
 import { EventEntity } from '../domain/entities/event.entity';
 import { PrismaEventMapper } from '../prisma/mappers/event.mapper';
-import { dateWithoutTz, endOfDay, startOfDay } from 'src/applications/utils/date.util';
+import {
+  dateWithoutTz,
+  endOfDay,
+  startOfDay,
+  tomorrowDate,
+} from 'src/applications/utils/date.util';
 
 @Injectable()
 export class PrismaEventRepository implements EventImplements {
@@ -56,6 +61,45 @@ export class PrismaEventRepository implements EventImplements {
 
     return events.map((event) => {
       return this.eventMapper.todayEvents(event);
+    });
+  }
+
+  async findTomorrowEvents(): Promise<EventEntity[]> {
+    const date = tomorrowDate().toISOString().split('T')[0];
+    const startTime = startOfDay(date);
+    const endTime = endOfDay(date);
+
+    const events = await this.prisma.events.findMany({
+      include: {
+        Users: true,
+      },
+      where: {
+        startDate: { gte: startTime },
+        endDate: { lte: endTime },
+      },
+    });
+
+    if (!events) return [];
+
+    return events.map((event) => {
+      return this.eventMapper.todayEvents(event);
+    });
+  }
+
+  async findNextEvents(userId: number): Promise<EventEntity[]> {
+    const date = dateWithoutTz(new Date());
+
+    const events = await this.prisma.events.findMany({
+      where: {
+        userId,
+        startDate: { gte: date },
+      },
+    });
+
+    if (!events) return [];
+
+    return events.map((event, index) => {
+      return this.eventMapper.nextEvents(event, Number(index + 1));
     });
   }
 
