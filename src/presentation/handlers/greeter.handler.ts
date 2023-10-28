@@ -49,4 +49,10 @@ export class GreeterUpdate {
   onAdminCommand(): string {
     return 'Welcome judge';
   }
+
+  @Hears(['thx', 'obrigado', 'valeu'])
+  @UseGuards(EventGuard)
+  onAcknowledgment(): string {
+    return `Por nada! ✌️`;
+  }
 }
