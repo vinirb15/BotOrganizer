@@ -1,5 +1,5 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { EVENT_SCENE_ID } from '../app.constants';
+import { CREATE_EVENT_SCENE_ID } from '../app.constants';
 import { WizardContext } from 'telegraf/typings/scenes';
 import { UseFilters } from '@nestjs/common';
 import { TelegrafExceptionFilter } from '../common/filters/telegraf-exception.filter';
@@ -7,7 +7,7 @@ import { EventService } from '@services/event.service';
 import { UserService } from '../services/user.service';
 import { EventInterface } from '../interfaces/event.interface';
 
-@Wizard(EVENT_SCENE_ID)
+@Wizard(CREATE_EVENT_SCENE_ID)
 @UseFilters(new TelegrafExceptionFilter())
 export class CreateEventWizard {
   constructor(
