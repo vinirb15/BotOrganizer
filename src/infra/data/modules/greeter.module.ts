@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { GreeterUpdate } from '@handlers/greeter.handler';
 import { RandomNumberScene } from '@scenes/random-number.scene';
 import { GreeterWizard } from '@wizards/greeter.wizard';
@@ -7,6 +7,8 @@ import { UserService } from '@services/user.service';
 import { CreateEventWizard } from '@wizards/create-event.wizard';
 import { EventService } from '@services/event.service';
 import { TelegramService } from '@services/telegram.service';
+import { UpdateEventWizard } from '@wizards/update-event.wizard';
+import { LogedUserHandler } from 'src/presentation/handlers/loged-user.handler';
 
 @Module({
   providers: [
@@ -18,6 +20,9 @@ import { TelegramService } from '@services/telegram.service';
     CreateEventWizard,
     EventService,
     TelegramService,
+    UpdateEventWizard,
+    LogedUserHandler,
+    Logger,
   ],
 })
 export class GreeterModule {}

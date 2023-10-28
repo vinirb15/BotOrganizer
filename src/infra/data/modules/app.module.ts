@@ -9,6 +9,7 @@ import { UserModule } from './user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventModule } from './event.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LoggerModule } from './logger.module';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7d' },
+      signOptions: { expiresIn: '1d' },
     }),
     TelegrafModule.forRootAsync({
       botName: BotName,
@@ -29,6 +30,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         include: [GreeterModule],
       }),
     }),
+    LoggerModule,
     ScheduleModule.forRoot(),
     GreeterModule,
     DataModule,
