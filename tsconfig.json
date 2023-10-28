@@ -39,7 +39,8 @@
       "@handlers/*": ["./src/presentation/handlers/*"],
       "@dtos/*": ["./src/applications/DTOs/*"],
       "@entities/*": ["./src/infra/data/domain/entities/*"],
-      "@applications/*": ["./src/applications/*"]
+      "@applications/*": ["./src/applications/*"],
+      "@utils/*": ["./src/applications/utils/*"]
     }
   }
 }

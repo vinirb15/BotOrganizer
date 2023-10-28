@@ -11,3 +11,9 @@ export function dateWithoutTz(date: Date): Date {
 
   return new Date(date.getTime() - userTimezoneOffset);
 }
+
+export function tomorrowDate(): Date {
+  const dataAtual = new Date();
+  dataAtual.setDate(dataAtual.getDate() + 1);
+  return dataAtual;
+}
