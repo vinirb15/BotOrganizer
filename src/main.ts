@@ -2,9 +2,12 @@ import { AppModule } from './infra/data/modules/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { MyLogger } from './applications/utils/logger.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useLogger(app.get(MyLogger));
 
   const config = new DocumentBuilder()
     .setTitle('Bot Organizer')
