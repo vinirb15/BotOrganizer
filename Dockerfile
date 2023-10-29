@@ -1,7 +1,6 @@
 FROM node:18.13-alpine as build 
 WORKDIR /usr/src/app
 COPY package*.json ./
-COPY yarn.lock ./
 COPY src/infra/data/prisma ./prisma
 RUN yarn install --frozen-lockfile
 RUN npx prisma generate
