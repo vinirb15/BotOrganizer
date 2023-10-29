@@ -1,5 +1,4 @@
-import { Command, Hears, Update, Ctx } from 'nestjs-telegraf';
-import { AdminGuard } from '@guards/admin.guard';
+import { Hears, Update, Ctx, Command } from 'nestjs-telegraf';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { TelegrafExceptionFilter } from '@filters/telegraf-exception.filter';
 import { Context } from '@interfaces/context.interface';
@@ -17,22 +16,29 @@ export class LogedUserHandler {
     private readonly userService: UserService
   ) {}
 
-  @Hears(/^(?=.*\bcriar\b)(?=.*\bevento\b).*\?$/i)
+  @Hears(/^(?=.*\bcriar\b)(?=.*\bevento\b).*\?$/iu)
   helpToCreate(): string {
     return 'Para criar um evento digite: "criar evento" e siga os passos sugeridos';
   }
 
-  @Hears(/criar.*evento|evento.*criar/)
+  @Hears(/criar.*evento|evento.*criar/iu)
+  @Hears(/novo.*evento|evento.*novo/iu)
+  @Command('criar')
   async onCreateEvent(@Ctx() ctx: Context): Promise<void> {
     await ctx.scene.enter(CREATE_EVENT_SCENE_ID);
   }
 
-  @Hears(/atualizar.*evento|evento.*atualizar/)
+  @Hears(/atualizar.*evento|evento.*atualizar/iu)
+  @Hears(/editar.*evento|evento.*editar/iu)
+  @Command('editar')
+  @Command('atualizar')
   async onUpdateEvent(@Ctx() ctx: Context): Promise<void> {
     await ctx.scene.enter(UPDATE_EVENT_SCENE_ID);
   }
 
-  @Hears(/proximos.*evento|evento.*proximos/)
+  @Hears(/próximos.*eventos|eventos.*próximos/iu)
+  @Hears(/proximos.*eventos|eventos.*proximos/iu)
+  @Command('proximos')
   async onNextEvents(@Ctx() ctx: Context): Promise<string> {
     const { id: userId } = await this.userService.findByBotId(String(ctx.message.from.id));
     const events = await this.eventService.findNextEvents(userId);

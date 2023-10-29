@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { GreeterModule } from './greeter.module';
+import { HandlerModule } from './handler.module';
 import { SessionMiddleware } from '@middlewares/session.middleware';
 import { BotName } from '../../../applications/app.constants';
 import { ConfigModule } from '@nestjs/config';
@@ -27,12 +27,12 @@ import { LoggerModule } from './logger.module';
       useFactory: () => ({
         token: process.env.BOT_TOKEN,
         middlewares: [SessionMiddleware],
-        include: [GreeterModule],
+        include: [HandlerModule],
       }),
     }),
     LoggerModule,
     ScheduleModule.forRoot(),
-    GreeterModule,
+    HandlerModule,
     DataModule,
     UserModule,
     EventModule,

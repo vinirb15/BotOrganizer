@@ -1,7 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { GreeterUpdate } from '@handlers/greeter.handler';
 import { RandomNumberScene } from '@scenes/random-number.scene';
-import { GreeterWizard } from '@wizards/greeter.wizard';
 import { CreateUserWizard } from '@wizards/create-user.wizard';
 import { UserService } from '@services/user.service';
 import { CreateEventWizard } from '@wizards/create-event.wizard';
@@ -14,7 +13,6 @@ import { LogedUserHandler } from 'src/presentation/handlers/loged-user.handler';
   providers: [
     GreeterUpdate,
     RandomNumberScene,
-    GreeterWizard,
     CreateUserWizard,
     UserService,
     CreateEventWizard,
@@ -25,4 +23,4 @@ import { LogedUserHandler } from 'src/presentation/handlers/loged-user.handler';
     Logger,
   ],
 })
-export class GreeterModule {}
+export class HandlerModule {}

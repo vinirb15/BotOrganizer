@@ -13,7 +13,7 @@ export class GreeterUpdate {
     return 'Diga olá!';
   }
 
-  @Hears(['Ola', 'Olá', 'olá', 'ola', 'Oi', 'oi'])
+  @Hears(/olá|ola|oi/iu)
   onGreetings(@Sender('first_name') firstName: string): string {
     return `Olá ${firstName}, seja bem vindo!`;
   }
@@ -23,9 +23,20 @@ export class GreeterUpdate {
     await ctx.scene.enter(CREATE_USER_SCENE_ID);
   }
 
-  @Hears(['thx', 'obrigado', 'valeu'])
+  @Hears(/thx|obrigado|valeu/iu)
   @UseGuards(EventGuard)
   onAcknowledgment(): string {
     return `Por nada! ✌️`;
+  }
+
+  @Hears(/ajuda|ajudar|help/iu)
+  @Command('help')
+  onHelp(): string {
+    return `Opções de eventos:
+    /criar - criar um novo evento
+    /editar - edita informações do evento
+    /proximos - lista seus próximos eventos
+    todos os eventos são notificados 1 dia antes
+    e no dia que ocorrerá `;
   }
 }
