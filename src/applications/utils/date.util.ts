@@ -15,5 +15,17 @@ export function dateWithoutTz(date: Date): Date {
 export function tomorrowDate(): Date {
   const dataAtual = new Date();
   dataAtual.setDate(dataAtual.getDate() + 1);
+
   return dataAtual;
+}
+
+export function getTime(date: Date): string {
+  const timeWithTZ = date.toISOString().split('T')[1];
+
+  return timeWithTZ.split('.')[0];
+}
+
+export function getDate(date: Date): string {
+  const [year, mounth, day] = date.toISOString().split('T')[0].split('-');
+  return `${day}/${mounth}/${year}`;
 }

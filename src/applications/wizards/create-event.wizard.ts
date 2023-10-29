@@ -6,6 +6,7 @@ import { TelegrafExceptionFilter } from '../common/filters/telegraf-exception.fi
 import { EventService } from '@services/event.service';
 import { UserService } from '../services/user.service';
 import { EventInterface } from '../interfaces/event.interface';
+import { dateWithoutTz } from '../utils/date.util';
 
 @Wizard(CREATE_EVENT_SCENE_ID)
 @UseFilters(new TelegrafExceptionFilter())
@@ -118,8 +119,8 @@ export class CreateEventWizard {
     const eventPayload = {
       userId,
       title,
-      startDate: startDateTime,
-      endDate: endDateTime,
+      startDate: dateWithoutTz(startDateTime),
+      endDate: dateWithoutTz(endDateTime),
       notes,
       repeat: 'no',
     };

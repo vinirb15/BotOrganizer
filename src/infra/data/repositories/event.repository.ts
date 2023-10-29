@@ -105,9 +105,7 @@ export class PrismaEventRepository implements EventImplements {
 
   async findNextHourEvents(): Promise<EventEntity[]> {
     const date = dateWithoutTz(new Date());
-    const endTime = endOfDay(date.toISOString().split('T')[0]);
-    console.log(date);
-    console.log(endTime);
+    const endTime = new Date(date.setHours(date.getHours() + 2));
 
     const events = await this.prisma.events.findMany({
       include: {
@@ -115,7 +113,7 @@ export class PrismaEventRepository implements EventImplements {
       },
       where: {
         startDate: {
-          gte: date,
+          gte: dateWithoutTz(new Date()),
           lte: endTime,
         },
       },

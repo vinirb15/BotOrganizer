@@ -3,6 +3,7 @@ import { EventInterface } from '@interfaces/event.interface';
 import { EventImplements } from '@data/repositories/implements/event.implments';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { TelegramService } from './telegram.service';
+import { getDate, getTime } from '../utils/date.util';
 
 @Injectable()
 export class EventService {
@@ -54,7 +55,9 @@ export class EventService {
       const { user, title, startDate, endDate } = event;
       await this.telegramService.sendMessage(
         Number(user.idBot),
-        `Você tem um evento programado para hoje:\n${title}\nInício: ${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}\nFim: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`
+        `Você tem um evento programado para hoje:\n${title}\n
+        Início: ${getDate(startDate)} ${getTime(startDate)}\n
+        Fim: ${getDate(endDate)} ${getTime(endDate)}`
       );
     }
     const timeTaken = Date.now() - start;
@@ -74,7 +77,9 @@ export class EventService {
       const { user, title, startDate, endDate } = event;
       await this.telegramService.sendMessage(
         Number(user.idBot),
-        `Você tem um evento programado para amanhã:\n${title}\nInício: ${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}\nFim: ${endDate.toLocaleDateString()} ${endDate.toLocaleTimeString()}`
+        `Você tem um evento programado para amanhã:\n${title}\n
+        Início: ${getDate(startDate)} ${getTime(startDate)}\n
+        Fim: ${getDate(endDate)} ${getTime(endDate)}`
       );
     }
     const timeTaken = Date.now() - start;
@@ -94,7 +99,7 @@ export class EventService {
       const { user, title, startDate } = event;
       await this.telegramService.sendMessage(
         Number(user.idBot),
-        `Seu evento ${title}, começará as ${startDate.toLocaleTimeString()}!!!`
+        `Seu evento ${title}, começará as ${getTime(startDate)}!!!`
       );
     }
     const timeTaken = Date.now() - start;

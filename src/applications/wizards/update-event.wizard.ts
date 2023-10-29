@@ -7,6 +7,7 @@ import { EventService } from '@services/event.service';
 import { UserService } from '../services/user.service';
 import { EventInterface } from '../interfaces/event.interface';
 import { EventEntity } from 'src/infra/data/domain/entities/event.entity';
+import { dateWithoutTz } from '../utils/date.util';
 // import { EventInterface } from '../interfaces/event.interface';
 
 @Wizard(UPDATE_EVENT_SCENE_ID)
@@ -162,8 +163,8 @@ export class UpdateEventWizard {
     const eventPayload = {
       userId,
       title,
-      startDate: startDateTime,
-      endDate: endDateTime,
+      startDate: dateWithoutTz(startDateTime),
+      endDate: dateWithoutTz(endDateTime),
       notes,
       repeat: 'no',
     };
