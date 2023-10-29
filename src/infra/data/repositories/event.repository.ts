@@ -42,6 +42,23 @@ export class PrismaEventRepository implements EventImplements {
     });
   }
 
+  async findNextEvents(userId: number): Promise<EventEntity[]> {
+    const date = dateWithoutTz(new Date());
+
+    const events = await this.prisma.events.findMany({
+      where: {
+        userId,
+        startDate: { gte: date },
+      },
+    });
+
+    if (!events) return [];
+
+    return events.map((event, index) => {
+      return this.eventMapper.nextEvents(event, Number(index + 1));
+    });
+  }
+
   async findTodayEvents(): Promise<EventEntity[]> {
     const date = dateWithoutTz(new Date()).toISOString().split('T')[0];
     const startTime = startOfDay(date);
@@ -86,20 +103,28 @@ export class PrismaEventRepository implements EventImplements {
     });
   }
 
-  async findNextEvents(userId: number): Promise<EventEntity[]> {
+  async findNextHourEvents(): Promise<EventEntity[]> {
     const date = dateWithoutTz(new Date());
+    const endTime = endOfDay(date.toISOString().split('T')[0]);
+    console.log(date);
+    console.log(endTime);
 
     const events = await this.prisma.events.findMany({
+      include: {
+        Users: true,
+      },
       where: {
-        userId,
-        startDate: { gte: date },
+        startDate: {
+          gte: date,
+          lte: endTime,
+        },
       },
     });
 
     if (!events) return [];
 
-    return events.map((event, index) => {
-      return this.eventMapper.nextEvents(event, Number(index + 1));
+    return events.map((event) => {
+      return this.eventMapper.todayEvents(event);
     });
   }
 

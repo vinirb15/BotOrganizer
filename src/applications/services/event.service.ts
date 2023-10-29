@@ -63,7 +63,7 @@ export class EventService {
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM, {
-    name: 'sendTomorrowNotification',
+    name: 'tomorrowNotification',
     timeZone: 'America/Sao_Paulo',
   })
   async tomorrowNotificationsCron() {
@@ -80,5 +80,25 @@ export class EventService {
     const timeTaken = Date.now() - start;
     this.logger.log('Finished!');
     this.logger.log('Tomorrow Notification Execution time: ' + timeTaken + ' milliseconds');
+  }
+
+  @Cron(CronExpression.EVERY_HOUR, {
+    name: 'nextHourNotification',
+    timeZone: 'America/Sao_Paulo',
+  })
+  async nextHourNotificationsCron() {
+    this.logger.log('Running next hour notifications...');
+    const start = Date.now();
+    const events = await this.eventRepository.findNextHourEvents();
+    for (const event of events) {
+      const { user, title, startDate } = event;
+      await this.telegramService.sendMessage(
+        Number(user.idBot),
+        `Seu evento ${title}, começará as ${startDate.toLocaleTimeString()}!!!`
+      );
+    }
+    const timeTaken = Date.now() - start;
+    this.logger.log('Finished!');
+    this.logger.log('Next Hour Notification Execution time: ' + timeTaken + ' milliseconds');
   }
 }
