@@ -41,7 +41,7 @@ export class LogedUserHandler {
       return 'Nenhum evento criado';
     }
 
-    return `Para começarmos, digite o id do evento que gostaria atualizar...\n${events
+    return `Seus próximos eventos:\n${events
       .map((e) => {
         return `${e.title} - Início/Fim: ${
           new Date(e.startDate).toLocaleDateString() +
@@ -51,11 +51,5 @@ export class LogedUserHandler {
       })
       .join('\n')
       .toString()}`;
-  }
-
-  @Command('admin')
-  @UseGuards(AdminGuard)
-  onAdminCommand(): string {
-    return 'Welcome judge';
   }
 }

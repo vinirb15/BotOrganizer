@@ -7,14 +7,29 @@ import { UserService } from '@services/user.service';
 export class EventGuard implements CanActivate {
   constructor(private readonly userService: UserService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = TelegrafExecutionContext.create(context);
-    const { from } = ctx.getContext<Context>();
-    const validSession = await this.userService.isValidIdBot(String(from.id));
+    try {
+      const ctx = TelegrafExecutionContext.create(context);
+      const { from } = ctx.getContext<Context>();
 
-    if (!validSession) {
-      throw new TelegrafException('Sessão expirada, logue novamente.');
+      const existUser = await this.userService.findByBotId(String(from.id));
+
+      if (!existUser) {
+        throw new TelegrafException(
+          'Primeiro acesso? digite /login e siga os passos de criação de uma nova conta.'
+        );
+      }
+
+      const validSession = await this.userService.isValidIdBot(String(from.id));
+
+      if (!validSession) {
+        throw new TelegrafException('Sessão expirada, logue novamente.');
+      }
+
+      return true;
+    } catch (error) {
+      throw new TelegrafException(
+        'Primeiro acesso? digite /login e siga os passos de criação de uma nova conta.'
+      );
     }
-
-    return true;
   }
 }
