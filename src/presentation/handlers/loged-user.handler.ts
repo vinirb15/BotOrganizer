@@ -9,8 +9,9 @@ import {
   UPDATE_EVENT_SCENE_ID,
 } from '@applications/app.constants';
 import { EventGuard } from '@guards/event.guard';
-import { EventService } from 'src/applications/services/event.service';
-import { UserService } from 'src/applications/services/user.service';
+import { EventService } from '@services/event.service';
+import { UserService } from '@services/user.service';
+import { TelegramService } from '@services/telegram.service';
 
 @Update()
 @UseGuards(EventGuard)
@@ -18,7 +19,8 @@ import { UserService } from 'src/applications/services/user.service';
 export class LogedUserHandler {
   constructor(
     private readonly eventService: EventService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly telegramService: TelegramService
   ) {}
 
   @Hears(/^(?=.*\bcriar\b)(?=.*\bevento\b).*\?$/iu)
@@ -38,6 +40,10 @@ export class LogedUserHandler {
   @Command('editar')
   @Command('atualizar')
   async onUpdateEvent(@Ctx() ctx: Context): Promise<void> {
+    await this.telegramService.sendMessage(
+      ctx.message.from.id,
+      'Selecione o Id do evento escolhido'
+    );
     await ctx.scene.enter(UPDATE_EVENT_SCENE_ID);
   }
 
@@ -70,6 +76,10 @@ export class LogedUserHandler {
   @Command('remover')
   @Command('deletar')
   async onDeleteEvent(@Ctx() ctx: Context): Promise<void> {
+    await this.telegramService.sendMessage(
+      ctx.message.from.id,
+      'Selecione o Id do evento escolhido'
+    );
     await ctx.scene.enter(DELETE_EVENT_SCENE_ID);
   }
 
@@ -80,6 +90,10 @@ export class LogedUserHandler {
   @Command('buscar')
   @Command('procurar')
   async onFindEvent(@Ctx() ctx: Context): Promise<void> {
+    await this.telegramService.sendMessage(
+      ctx.message.from.id,
+      'Selecione o Id do evento escolhido'
+    );
     await ctx.scene.enter(GET_EVENT_SCENE_ID);
   }
 }
