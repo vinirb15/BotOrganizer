@@ -5,6 +5,7 @@ import { Context } from '@interfaces/context.interface';
 import {
   CREATE_EVENT_SCENE_ID,
   DELETE_EVENT_SCENE_ID,
+  GET_EVENT_SCENE_ID,
   UPDATE_EVENT_SCENE_ID,
 } from '@applications/app.constants';
 import { EventGuard } from '@guards/event.guard';
@@ -70,5 +71,15 @@ export class LogedUserHandler {
   @Command('deletar')
   async onDeleteEvent(@Ctx() ctx: Context): Promise<void> {
     await ctx.scene.enter(DELETE_EVENT_SCENE_ID);
+  }
+
+  @Hears(/buscar.*eventos|eventos.*buscar/iu)
+  @Hears(/buscar.*evento|evento.*buscar/iu)
+  @Hears(/procurar.*eventos|eventos.*procurar/iu)
+  @Hears(/procurar.*evento|evento.*procurar/iu)
+  @Command('buscar')
+  @Command('procurar')
+  async onFindEvent(@Ctx() ctx: Context): Promise<void> {
+    await ctx.scene.enter(GET_EVENT_SCENE_ID);
   }
 }

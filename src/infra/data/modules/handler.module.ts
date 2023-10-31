@@ -9,6 +9,7 @@ import { TelegramService } from '@services/telegram.service';
 import { UpdateEventWizard } from '@wizards/update-event.wizard';
 import { LogedUserHandler } from 'src/presentation/handlers/loged-user.handler';
 import { DeleteEventWizard } from 'src/applications/wizards/delete-event.wizard';
+import { GetEventWizard } from 'src/applications/wizards/get-event.wizard';
 
 @Module({
   providers: [
@@ -23,6 +24,7 @@ import { DeleteEventWizard } from 'src/applications/wizards/delete-event.wizard'
     LogedUserHandler,
     Logger,
     DeleteEventWizard,
+    GetEventWizard,
   ],
 })
 export class HandlerModule {}
