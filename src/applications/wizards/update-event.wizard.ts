@@ -8,7 +8,6 @@ import { UserService } from '../services/user.service';
 import { EventInterface } from '../interfaces/event.interface';
 import { EventEntity } from 'src/infra/data/domain/entities/event.entity';
 import { dateWithoutTz } from '../utils/date.util';
-// import { EventInterface } from '../interfaces/event.interface';
 
 @Wizard(UPDATE_EVENT_SCENE_ID)
 @UseFilters(new TelegrafExceptionFilter())

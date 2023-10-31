@@ -36,7 +36,6 @@ export class GreeterUpdate {
     /criar - criar um novo evento
     /editar - edita informações do evento
     /proximos - lista seus próximos eventos
-    todos os eventos são notificados 1 dia antes
-    e no dia que ocorrerá `;
+    todos os eventos são notificados 1 dia antes e no dia que ocorrerá `;
   }
 }
