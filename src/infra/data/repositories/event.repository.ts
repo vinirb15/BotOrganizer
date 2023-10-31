@@ -32,6 +32,7 @@ export class PrismaEventRepository implements EventImplements {
     const events = await this.prisma.events.findMany({
       where: {
         userId: userId,
+        inactive: false,
       },
     });
 
@@ -49,6 +50,7 @@ export class PrismaEventRepository implements EventImplements {
       where: {
         userId,
         startDate: { gte: date },
+        inactive: false,
       },
     });
 
@@ -71,6 +73,7 @@ export class PrismaEventRepository implements EventImplements {
       where: {
         startDate: { gte: startTime },
         endDate: { lte: endTime },
+        inactive: false,
       },
     });
 
@@ -93,6 +96,7 @@ export class PrismaEventRepository implements EventImplements {
       where: {
         startDate: { gte: startTime },
         endDate: { lte: endTime },
+        inactive: false,
       },
     });
 
@@ -116,6 +120,7 @@ export class PrismaEventRepository implements EventImplements {
           gte: dateWithoutTz(new Date()),
           lte: endTime,
         },
+        inactive: false,
       },
     });
 

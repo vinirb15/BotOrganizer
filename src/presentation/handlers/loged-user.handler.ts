@@ -2,7 +2,11 @@ import { Hears, Update, Ctx, Command } from 'nestjs-telegraf';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { TelegrafExceptionFilter } from '@filters/telegraf-exception.filter';
 import { Context } from '@interfaces/context.interface';
-import { CREATE_EVENT_SCENE_ID, UPDATE_EVENT_SCENE_ID } from '@applications/app.constants';
+import {
+  CREATE_EVENT_SCENE_ID,
+  DELETE_EVENT_SCENE_ID,
+  UPDATE_EVENT_SCENE_ID,
+} from '@applications/app.constants';
 import { EventGuard } from '@guards/event.guard';
 import { EventService } from 'src/applications/services/event.service';
 import { UserService } from 'src/applications/services/user.service';
@@ -42,9 +46,9 @@ export class LogedUserHandler {
   async onNextEvents(@Ctx() ctx: Context): Promise<string> {
     const { id: userId } = await this.userService.findByBotId(String(ctx.message.from.id));
     const events = await this.eventService.findNextEvents(userId);
-    if (!events) {
+    if (!events || events.length === 0) {
       await ctx.scene.leave();
-      return 'Nenhum evento criado';
+      return 'Nenhum evento encontrado';
     }
 
     return `Seus próximos eventos:\n${events
@@ -57,5 +61,14 @@ export class LogedUserHandler {
       })
       .join('\n')
       .toString()}`;
+  }
+
+  @Hears(/deletar.*evento|evento.*deletar/iu)
+  @Hears(/excluir.*evento|evento.*excluir/iu)
+  @Command('excluir')
+  @Command('remover')
+  @Command('deletar')
+  async onDeleteEvent(@Ctx() ctx: Context): Promise<void> {
+    await ctx.scene.enter(DELETE_EVENT_SCENE_ID);
   }
 }
