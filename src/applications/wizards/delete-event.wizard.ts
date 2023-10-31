@@ -20,7 +20,7 @@ export class DeleteEventWizard {
     const { id: userId } = await this.userService.findByBotId(String(ctx.message.from.id));
     const events = await this.eventService.findNextEvents(userId);
 
-    if (!events) {
+    if (!events || events.length === 0) {
       await ctx.scene.leave();
       return 'Nenhum evento criado';
     }
@@ -51,7 +51,7 @@ export class DeleteEventWizard {
     const { events } = ctx.wizard.state;
     const event = events.find((event) => event.orderId === Number(msg.text));
     if (!event) {
-      await ctx.wizard.selectStep(1);
+      await ctx.scene.leave();
       return 'Id selecionado inválido';
     }
 
@@ -63,7 +63,7 @@ export class DeleteEventWizard {
 
   @On('text')
   @WizardStep(3)
-  async onDescription(
+  async onConfirmation(
     @Ctx()
     ctx: WizardContext & {
       wizard: {

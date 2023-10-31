@@ -53,7 +53,7 @@ export class UpdateEventWizard {
     const { events } = ctx.wizard.state;
     const event = events.find((event) => event.orderId === Number(msg.text));
     if (!event) {
-      await ctx.wizard.selectStep(1);
+      await ctx.scene.leave();
       return 'Id selecionado inválido';
     }
 
