@@ -27,9 +27,7 @@ export class EventGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      throw new TelegrafException(
-        'Primeiro acesso? digite /login e siga os passos de criação de uma nova conta.'
-      );
+      throw new TelegrafException(error.message);
     }
   }
 }
