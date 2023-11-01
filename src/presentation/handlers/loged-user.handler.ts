@@ -12,6 +12,7 @@ import { EventGuard } from '@guards/event.guard';
 import { EventService } from '@services/event.service';
 import { UserService } from '@services/user.service';
 import { TelegramService } from '@services/telegram.service';
+import { getDate } from 'src/applications/utils/date.util';
 
 @Update()
 @UseGuards(EventGuard)
@@ -60,11 +61,7 @@ export class LogedUserHandler {
 
     return `Seus próximos eventos:\n${events
       .map((e) => {
-        return `${e.title} - Início/Fim: ${
-          new Date(e.startDate).toLocaleDateString() +
-          ' ' +
-          new Date(e.endDate).toLocaleDateString()
-        }`;
+        return `${e.title} - Início/Fim: ${getDate(e.startDate) + ' ' + getDate(e.endDate)}`;
       })
       .join('\n')
       .toString()}`;
