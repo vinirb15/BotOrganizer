@@ -20,7 +20,7 @@ import { LoggerModule } from './logger.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '30 days' },
     }),
     TelegrafModule.forRootAsync({
       botName: BotName,
