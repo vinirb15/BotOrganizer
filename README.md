@@ -22,52 +22,80 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# BotOrganizer - Chatbot with NestJS and Telegram
 
-## Installation
+## Overview
 
-```bash
-$ yarn install
-```
+BotOrganizer is a chatbot developed with NestJS that helps you organize your tasks and appointments through Telegram. It allows you to create, list, mark as completed, and set reminders for your tasks, all directly within your Telegram chat.
 
-## Running the app
+## Technologies Used
 
-```bash
-# development
-$ yarn run start
+*   **NestJS:** Framework for building efficient and scalable Node.js applications.
+*   **TypeScript:** Programming language that offers static typing for greater security and ease of maintenance.
+*   **PostgreSQL:** Relational database used for storing tasks.
 
-# watch mode
-$ yarn run start:dev
+## Features
 
-# production mode
-$ yarn run start:prod
-```
+*   **Create Tasks:** Create new tasks with a title, description, due date, and priority.
+*   **List Tasks:**  View all your tasks in order of priority or due date.
+*   **Set Reminders:** Set reminders for specific tasks based on date and time.
+*   **Telegram Interface:**  Interact with BotOrganizer through the Telegram bot.
+*   **Due Date Management:** Define task due dates.
 
-## Test
+## How to Use
 
-```bash
-# unit tests
-$ yarn run test
+1.  **Obtain your Telegram Bot Token:**
+    *   Create a bot using BotFather on Telegram.
+    *   Obtain your bot's token.  You'll need this to configure BotOrganizer.
 
-# e2e tests
-$ yarn run test:e2e
+2.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/vinirb15/BotOrganizer.git
+    cd BotOrganizer
+    ```
 
-# test coverage
-$ yarn run test:cov
-```
+3.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
 
-## Support
+4.  **Configure the Bot:**
+    *   Edit the `.env` file to configure environment variables, including:
+        *   `BOT_TOKEN`: Your Telegram Bot Token.
+        *   `HOST`: Host of your PostgreSQL database.
+        *   `POSTGRES_USER`: PostgreSQL user.
+        *   `POSTGRES_PASSWORD`: PostgreSQL password.
+        *   `POSTGRES_DB`: Name of your PostgreSQL database.
+        *   `ENCRYPT_SALT`: Salt for encrypting sensitive data.
+        *   `JWT_SECRET`: Secret key for JWT authentication.
+        *   `NODE_ENV`: Environment mode (e.g., local, production).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+5.  **Run the Bot:**
+    ```bash
+    # development
+    npm start
 
-## Stay in touch
+    # watch mode
+    npm run start:dev
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    # production mode
+    npm run start:prod
+    ```
 
-## License
+6.  **Interact with the Bot in Telegram:**
+    *   Start a conversation with your bot on Telegram.
+    *   Use the bot's commands to create, list, mark as completed, and set reminders for your tasks.
 
-Nest is [MIT licensed](LICENSE).
+## Improvements and Next Steps
+
+### Fixes
+*   **Today’s Events:** Correction to ensure that today’s events are correctly displayed.
+*   **Login Expiration:** Extended the login expiration time to 30 days.
+
+### Features
+*   **Date & Time Validation:** Implementation of validation to ensure date and time consistency, using the date format without timezone information.
+*   **“Today” Option:** Added a "Today" option to the date selection options, making it easier to choose the current day.
+*   **Audio Implementation:**  Implementation of audio usage (e.g., for event descriptions, voice messages, etc.).
+*   **Group Usage:**  Implementation of the ability to use the chatbot in groups (with privacy and organization considerations).
+*   **Add Images to Events:** Capability to add images to events to enrich the presentation and context.
